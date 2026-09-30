@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #111827;
+        }
+
+        /* Navbar */
+        nav {
+            height: 65px;
+            background: #111827;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8%;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #3b82f6;
+        }
+
+        nav p {
+            color: #e5e7eb;
+            font-size: 14px;
+        }
+
+        /* Main */
+        .container {
+            width: 90%;
+            max-width: 1080px;
+            margin: 55px auto;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            color: #64748b;
+            font-size: 17px;
+        }
+
+        /* Shorten Box */
+        .shorten-box {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, .07);
+            margin-bottom: 45px;
+        }
+
+        .shorten-box h2 {
+            font-size: 23px;
+            margin-bottom: 8px;
+        }
+
+        .shorten-box p {
+            color: #64748b;
+            margin-bottom: 22px;
+        }
+
+        form {
+            display: flex;
+            gap: 12px;
+        }
+
+        input {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+        }
+
+        button {
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 0 25px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        /* Result */
+        #result {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: #ecfdf5;
+            border-radius: 8px;
+        }
+
+        #result a {
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        /* Recent */
+        .recent h2 {
+            font-size: 27px;
+            margin-bottom: 7px;
+        }
+
+        .recent>p {
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+
+        .empty {
+            background: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 14px;
+        }
+
+        .empty h3 {
+            margin-bottom: 8px;
+        }
+
+        .empty p {
+            color: #64748b;
+        }
+
+        /* URL Card */
+        .url-card {
+            background: white;
+            padding: 22px;
+            border-radius: 14px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, .05);
+        }
+
+        .url-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .url-top a {
+            color: #2563eb;
+            font-size: 17px;
+            font-weight: bold;
+            word-break: break-all;
+        }
+
+        .copy {
+            padding: 9px 15px;
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .copy:hover {
+            background: #dbeafe;
+        }
+
+        .original {
+            margin-top: 15px;
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 8px;
+            word-break: break-all;
+            color: #475569;
+        }
+
+        .stats {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat {
+            flex: 1;
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .stat small {
+            color: #64748b;
+        }
+
+        .stat strong {
+            display: block;
+            margin-top: 5px;
+            font-size: 18px;
+        }
+
+        .history {
+            margin-top: 18px;
+        }
+
+        .history li {
+            list-style: none;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            color: #64748b;
+        }
+
+        footer {
+            text-align: center;
+            color: #94a3b8;
+            padding: 30px;
+        }
+
+        /* Mobile */
+        @media(max-width: 650px) {
+            nav {
+                padding: 0 5%;
+            }
+
+            nav p {
+                display: none;
+            }
+
+            .container {
+                width: 92%;
+                margin: 35px auto;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            form {
+                flex-direction: column;
+            }
+
+            form button {
+                height: 48px;
+            }
+
+            .url-top {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .copy {
+                width: 100%;
+                height: 40px;
+            }
+
+            .stats {
+                flex-direction: column;
+            }
+
+            .history li {
+                flex-direction: column;
+                gap: 4px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <div class="logo">
+            Short<span>Link</span>
+        </div>
+
+        <p>Simple & Fast URL Shortener</p>
+    </nav>
+
+
+    <main class="container">
+
+        <!-- Hero -->
+        <section class="hero">
+            <h1>Shorten Your URLs</h1>
+            <p>Create short, simple and shareable links in seconds.</p>
+        </section>
+
+
+        <!-- Shorten URL -->
+        <section class="shorten-box">
+
+            <h2>Create a Short Link</h2>
+
+            <p>
+                Paste your long URL below and generate a short link.
+            </p>
+
+            <form id="form">
+
+                <input type="url" name="originalUrl" placeholder="https://example.com/very-long-url" required>
+
+                <button type="submit">
+                    Shorten URL
+                </button>
+
+            </form>
+
+            <div id="result"></div>
+
+        </section>
+
+
+        <!-- Recently Shortened -->
+        <section class="recent">
+
+            <h2>Recently Shortened URLs</h2>
+
+            <p>View and track your shortened links.</p>
+
+
+            <% if (!urls || urls.length===0) { %>
+
+                <div class="empty">
+                    <h3>No shortened URLs yet</h3>
+                    <p>Enter a URL above to create your first short link.</p>
+                </div>
+
+                <% } else { %>
+
+
+                    <% urls.forEach(url=> { %>
+
+                        <div class="url-card">
+
+                            <div class="url-top">
+
+                                <a href="/api/<%= url.shortUrl %>" target="_blank">
+                                    localhost:3000/api/<%= url.shortUrl %>
+                                </a>
+
+                                <button class="copy" onclick="copyUrl(
+                                    'http://localhost:3000/api/<%= url.shortUrl %>'
+                                )">
+                                    Copy
+                                </button>
+
+                            </div>
+
+
+                            <div class="original">
+                                <b>Original URL</b><br>
+                                <%= url.originalUrl %>
+                            </div>
+
+
+                            <div class="stats">
+
+                                <div class="stat">
+                                    <small>Total Visits</small>
+                                    <strong>
+                                        <%= url.visitedHistory.length %>
+                                    </strong>
+                                </div>
+
+                                <div class="stat">
+                                    <small>Short Code</small>
+                                    <strong>
+                                        <%= url.shortUrl %>
+                                    </strong>
+                                </div>
+
+                            </div>
+
+
+                            <% if (url.visitedHistory.length> 0) { %>
+
+                                <div class="history">
+
+                                    <b>Visit History</b>
+
+                                    <ul>
+
+                                        <% url.visitedHistory.forEach(history=> { %>
+
+                                            <li>
+                                                <span>
+                                                    Visit #<%= history.visitedCount %>
+                                                </span>
+
+                                                <span>
+                                                    <%= new Date( history.visitedAt ).toLocaleString() %>
+                                                </span>
+                                            </li>
+
+                                            <% }) %>
+
+                                    </ul>
+
+                                </div>
+
+                                <% } %>
+
+                        </div>
+
+                        <% }) %>
+
+                            <% } %>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        URL Shortener © 2026
+    </footer>
+
+
+    <script>
+
+        const form = document.getElementById("form");
+        const result = document.getElementById("result");
+
+        form.addEventListener("submit", async (e) => {
+
+            e.preventDefault();
+
+            const originalUrl = form.originalUrl.value;
+
+            try {
+
+                const response = await fetch("/api/shorten", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ originalUrl })
+                });
+
+                const text = await response.text();
+
+                if (!response.ok) {
+                    throw new Error(text);
+                }
+
+                let data;
+
+                try {
+                    data = JSON.parse(text);
+                } catch {
+                    throw new Error("Server did not return JSON: " + text);
+                }
+
+                const shortUrl =
+                    `${location.origin}/api/${data.shortUrl}`;
+
+                result.style.display = "block";
+
+                result.innerHTML = `
+                    ✅ Short URL:
+                    <a href="${shortUrl}" target="_blank">
+                        ${shortUrl}
+                    </a>
+                `;
+
+                form.reset();
+
+                setTimeout(() => location.reload(), 1200);
+
+            } catch (error) {
+
+                result.style.display = "block";
+
+                result.innerHTML = `❌ ${error.message}`;
+            }
+        });
+
+
+        function copyUrl(url) {
+
+            navigator.clipboard.writeText(url);
+
+            alert("URL copied!");
+
+        }
+
+    </script>
+
+</body>
+
+</html>
