@@ -350,5 +350,3 @@ Through this project, I practiced:
 ## ⭐ Support
 
 If you found this project useful, consider giving the repository a **⭐ Star** on GitHub.
-
-The `./` is intentional—it tells GitHub to load the images **relative to the README's location**.
