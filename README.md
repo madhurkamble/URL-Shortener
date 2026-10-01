@@ -1,4 +1,3 @@
-````markdown
 # 🔗 URL Shortener
 
 > A simple and efficient URL Shortener built using **Node.js, Express.js, MongoDB, Mongoose and EJS**, with URL redirection, visit analytics and user authentication.
@@ -103,9 +102,6 @@ URL Shortener/
 ├── package.json
 ├── package-lock.json
 └── README.md
-````
-
----
 
 ## ⚙️ Application Workflow
 
