@@ -1,7 +1,3 @@
-Yes, understood. You want **the exact same README structure and style you pasted**, with **only today's authentication work added/updated** — not a completely redesigned README.
-
-Here is your README in the same format, updated for today's work:
-
 ````markdown
 # 🔗 URL Shortener
 
@@ -25,6 +21,7 @@ The application allows users to:
 - 👤 Register a new account
 - 🔐 Login securely
 - 🚪 Logout from the application
+- 🔒 Access protected URL functionality after authentication
 
 ---
 
@@ -41,9 +38,10 @@ The application allows users to:
 - **User Registration** — Create a new account using username, email and password.
 - **User Login** — Authenticate users using email and password.
 - **User Logout** — Logout from the application and clear the authentication cookie.
-- **JWT Authentication** — Secure authenticated routes using JSON Web Tokens.
-- **Password Hashing** — Hash user passwords securely using bcryptjs.
-- **HTTP-only Cookie** — Store the authentication token securely in a cookie.
+- **JWT Authentication** — Generate and verify JSON Web Tokens for authenticated users.
+- **Password Hashing** — Hash user passwords using bcryptjs before storing them.
+- **Authentication Middleware** — Protect URL shortening and analytics routes.
+- **HTTP-only Cookie** — Store the JWT authentication token in a cookie.
 
 ---
 
@@ -59,7 +57,7 @@ The application allows users to:
 | **HTML/CSS** | User interface |
 | **JavaScript** | Frontend interactions |
 | **ShortID** | Short URL generation |
-| **JWT** | User authentication |
+| **JSON Web Token (JWT)** | User authentication |
 | **bcryptjs** | Password hashing |
 | **cookie-parser** | Authentication cookie handling |
 | **dotenv** | Environment variable management |
@@ -116,19 +114,25 @@ User registers an account
         ↓
 POST /auth/register
         ↓
-Password is hashed using bcryptjs
+Validate user information
         ↓
-User data saved in MongoDB
+Hash password using bcryptjs
+        ↓
+Save user in MongoDB
         ↓
 User logs in
         ↓
 POST /auth/login
         ↓
-JWT token generated
+Verify email and password
         ↓
-Token stored in HTTP-only cookie
+Generate JWT token
+        ↓
+Store JWT token in HTTP-only cookie
         ↓
 User accesses URL Shortener
+        ↓
+Authentication middleware verifies token
         ↓
 User enters long URL
         ↓
@@ -148,34 +152,48 @@ Record Visit
         ↓
 Redirect to Original URL
         ↓
-User can Logout
+User can view analytics
+        ↓
+User clicks Logout
         ↓
 Authentication cookie is cleared
+        ↓
+User is redirected to Login
 ```
 
 ---
 
 ## 🔌 API Endpoints
 
-| Method | Endpoint                   | Description              |
-| ------ | -------------------------- | ------------------------ |
-| `GET`  | `/`                        | Display homepage         |
-| `POST` | `/auth/register`           | Register a new user      |
-| `POST` | `/auth/login`              | Login user               |
-| `GET`  | `/auth/logout`             | Logout user              |
-| `POST` | `/api/shorten`             | Create a short URL       |
-| `GET`  | `/api/:shortUrl`           | Redirect to original URL |
-| `GET`  | `/api/analytics/:shortUrl` | Get URL analytics        |
+| Method | Endpoint                   | Description               |
+| ------ | -------------------------- | ------------------------- |
+| `GET`  | `/`                        | Display homepage          |
+| `GET`  | `/register`                | Display registration page |
+| `GET`  | `/login`                   | Display login page        |
+| `POST` | `/auth/register`           | Register a new user       |
+| `POST` | `/auth/login`              | Login user                |
+| `GET`  | `/auth/logout`             | Logout user               |
+| `POST` | `/api/shorten`             | Create a short URL        |
+| `GET`  | `/api/:shortUrl`           | Redirect to original URL  |
+| `GET`  | `/api/analytics/:shortUrl` | Get URL analytics         |
 
-### User Registration
+---
 
-**Request:**
+## 👤 User Registration
+
+Users can create a new account using their:
+
+* Username
+* Email
+* Password
+
+### Request
 
 ```http
 POST /auth/register
 ```
 
-**Body:**
+### Example Body
 
 ```json
 {
@@ -185,19 +203,21 @@ POST /auth/register
 }
 ```
 
-After successful registration, the user is redirected to the application.
+The password is hashed using **bcryptjs** before being stored in MongoDB.
 
 ---
 
-### User Login
+## 🔐 User Login
 
-**Request:**
+Registered users can log in using their email and password.
+
+### Request
 
 ```http
 POST /auth/login
 ```
 
-**Body:**
+### Example Body
 
 ```json
 {
@@ -206,21 +226,45 @@ POST /auth/login
 }
 ```
 
-After successful login, a JWT token is generated and stored in an HTTP-only cookie.
+After successful authentication:
+
+```text
+User Login
+    ↓
+Password Verification
+    ↓
+JWT Token Generated
+    ↓
+Token Stored in HTTP-only Cookie
+    ↓
+User Redirected to Homepage
+```
 
 ---
 
-### User Logout
+## 🚪 User Logout
+
+Users can logout using the **Logout** button available on the homepage.
+
+### Request
 
 ```http
 GET /auth/logout
 ```
 
-The authentication cookie is cleared and the user is redirected to the login page.
+Logout process:
+
+```text
+User clicks Logout
+        ↓
+Authentication cookie cleared
+        ↓
+User redirected to /login
+```
 
 ---
 
-### Create Short URL
+## 🔗 Create Short URL
 
 **Request:**
 
@@ -246,7 +290,27 @@ POST /api/shorten
 
 ---
 
-### Get Analytics
+## 🔄 URL Redirection
+
+The generated short URL can be accessed using:
+
+```http
+GET /api/AaQCQczQp
+```
+
+The application:
+
+1. Finds the short URL in MongoDB.
+2. Checks whether the URL exists.
+3. Records the visit.
+4. Stores the visit timestamp.
+5. Redirects the user to the original URL.
+
+---
+
+## 📊 Get Analytics
+
+Analytics can be accessed using:
 
 ```http
 GET /api/analytics/AaQCQczQp
@@ -268,6 +332,30 @@ Example response:
 
 ---
 
+## 🛡️ Authentication Middleware
+
+Protected routes use authentication middleware to verify the user's JWT token.
+
+The middleware:
+
+```text
+Request
+   ↓
+Check authentication cookie
+   ↓
+JWT token found?
+   ↓
+Verify JWT
+   ↓
+Valid token?
+   ├── Yes → Allow request
+   └── No  → Redirect to Login
+```
+
+The authentication middleware protects URL-related functionality from unauthenticated access.
+
+---
+
 ## 🗄️ Database
 
 ### Database Name
@@ -276,7 +364,11 @@ Example response:
 url_shortner
 ```
 
-### User Document
+---
+
+### User Collection
+
+User information is stored with the following fields:
 
 ```text
 username
@@ -294,7 +386,11 @@ Example:
 }
 ```
 
-### URL Document
+---
+
+### URL Collection
+
+URL information is stored with the following fields:
 
 ```text
 originalUrl
@@ -425,7 +521,17 @@ The application uses:
 mongodb://localhost:27017/url_shortner
 ```
 
-### 5. Start the Server
+### 5. Configure Environment Variables
+
+Create a `.env` file in the project root:
+
+```env
+JWT_SECRET=my_super_secret_key_123456
+```
+
+> Make sure `.env` is included in `.gitignore`.
+
+### 6. Start the Server
 
 ```bash
 node index.js
@@ -437,7 +543,7 @@ Or, if Nodemon is configured:
 npm run dev
 ```
 
-### 6. Open the Application
+### 7. Open the Application
 
 ```text
 http://localhost:3000
@@ -449,13 +555,13 @@ http://localhost:3000
 
 The application uses environment variables for JWT authentication.
 
-Create a `.env` file:
+Example `.env`:
 
 ```env
 JWT_SECRET=my_super_secret_key_123456
 ```
 
-> Make sure `.env` is included in `.gitignore`.
+> Do not upload the `.env` file to GitHub.
 
 ---
 
@@ -489,8 +595,9 @@ Through this project, I practiced:
 * Implementing user registration and login
 * Using JWT for authentication
 * Hashing passwords using bcryptjs
-* Working with HTTP-only cookies
+* Managing authentication using HTTP-only cookies
 * Protecting routes using authentication middleware
+* Managing environment variables using dotenv
 * Using Git and GitHub for version control
 
 ---
@@ -500,9 +607,11 @@ Through this project, I practiced:
 ### Madhur Kamble
 
 🔗 **GitHub:**
+
 [https://github.com/madhurkamble](https://github.com/madhurkamble)
 
 🔗 **LinkedIn:**
+
 [https://www.linkedin.com/in/madhur-kamble-55911b290](https://www.linkedin.com/in/madhur-kamble-55911b290)
 
 ---
@@ -512,6 +621,5 @@ Through this project, I practiced:
 If you found this project useful, consider giving the repository a **⭐ Star** on GitHub.
 
 ```
-
-This keeps **your original README organization, wording style, tables, sections, API format, screenshot format, and installation format**, while adding only the work you completed today.
 ```
+
