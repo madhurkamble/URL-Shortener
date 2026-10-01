@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Login | ShortLink</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #111827;
+            min-height: 100vh;
+        }
+
+        header {
+            height: 80px;
+            background: #111827;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8%;
+            color: white;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #2563eb;
+        }
+
+        header p {
+            font-size: 16px;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            padding: 70px 20px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 450px;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 35px #00000012;
+        }
+
+        h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .sub {
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+
+        form {
+            display: grid;
+            gap: 18px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            margin-top: 7px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+        }
+
+        button {
+            padding: 14px;
+            border: 0;
+            border-radius: 10px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .bottom {
+            text-align: center;
+            margin-top: 25px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+
+            header {
+                padding: 0 20px;
+            }
+
+            header p {
+                display: none;
+            }
+
+            .card {
+                padding: 30px 25px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Header -->
+
+    <header>
+
+        <div class="logo">
+            Short<span>Link</span>
+        </div>
+
+        <p>
+            Simple & Fast URL Shortener
+        </p>
+
+    </header>
+
+
+    <!-- Login -->
+
+    <main>
+
+        <div class="card">
+
+            <h1>
+                Welcome Back
+            </h1>
+
+            <p class="sub">
+                Login to manage your shortened URLs.
+            </p>
+
+
+            <form
+                action="/auth/login"
+                method="POST"
+            >
+
+                <label>
+
+                    Email
+
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        required
+                    >
+
+                </label>
+
+
+                <label>
+
+                    Password
+
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        required
+                    >
+
+                </label>
+
+
+                <button type="submit">
+                    Login
+                </button>
+
+            </form>
+
+
+            <p class="bottom">
+
+                Don't have an account?
+
+                <a href="/register">
+                    Create an account
+                </a>
+
+            </p>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

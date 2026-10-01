@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | ShortLink</title>
+
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+
+        body{
+            font-family:Arial,sans-serif;
+            background:#f5f7fb;
+            color:#111827;
+            min-height:100vh;
+        }
+
+        header{
+            height:80px;
+            background:#111827;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            padding:0 8%;
+            color:white;
+        }
+
+        .logo{
+            font-size:30px;
+            font-weight:bold;
+        }
+
+        .logo span{color:#2563eb}
+
+        header p{font-size:16px}
+
+        main{
+            display:flex;
+            justify-content:center;
+            padding:60px 20px;
+        }
+
+        .card{
+            width:100%;
+            max-width:450px;
+            background:white;
+            padding:40px;
+            border-radius:20px;
+            box-shadow:0 10px 35px #00000012;
+        }
+
+        h1{
+            font-size:30px;
+            margin-bottom:8px;
+        }
+
+        .sub{
+            color:#64748b;
+            margin-bottom:28px;
+        }
+
+        form{
+            display:grid;
+            gap:17px;
+        }
+
+        label{
+            font-size:14px;
+            font-weight:bold;
+        }
+
+        input{
+            width:100%;
+            padding:14px;
+            margin-top:7px;
+            border:1px solid #d1d5db;
+            border-radius:10px;
+            font-size:15px;
+            outline:none;
+        }
+
+        input:focus{border-color:#2563eb}
+
+        button{
+            padding:14px;
+            border:0;
+            border-radius:10px;
+            background:#2563eb;
+            color:white;
+            font-size:16px;
+            font-weight:bold;
+            cursor:pointer;
+        }
+
+        button:hover{background:#1d4ed8}
+
+        .bottom{
+            text-align:center;
+            margin-top:25px;
+            color:#64748b;
+            font-size:14px;
+        }
+
+        a{
+            color:#2563eb;
+            text-decoration:none;
+            font-weight:bold;
+        }
+
+        .error{
+            color:#dc2626;
+            margin-bottom:15px;
+            font-size:14px;
+        }
+
+        @media(max-width:600px){
+            header{padding:0 20px}
+            header p{display:none}
+            .card{padding:30px 25px}
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">Short<span>Link</span></div>
+    <p>Simple & Fast URL Shortener</p>
+</header>
+
+<main>
+
+    <div class="card">
+
+        <h1>Create Account</h1>
+
+        <p class="sub">
+            Create your ShortLink account.
+        </p>
+
+        <% if (typeof error !== 'undefined' && error.length > 0) { %>
+            <p class="error"><%= error %></p>
+        <% } %>
+
+        <form action="/auth/register" method="POST">
+
+            <label>
+                Username
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Enter your username"
+                    required
+                >
+            </label>
+
+            <label>
+                Email
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
+                >
+            </label>
+
+            <label>
+                Password
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Create a password"
+                    required
+                >
+            </label>
+
+            <button type="submit">
+                Create Account
+            </button>
+
+        </form>
+
+        <p class="bottom">
+            Already have an account?
+            <a href="/login">Login</a>
+        </p>
+
+    </div>
+
+</main>
+
+</body>
+</html>

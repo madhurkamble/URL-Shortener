@@ -39,9 +39,29 @@
             color: #3b82f6;
         }
 
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
         nav p {
             color: #e5e7eb;
             font-size: 14px;
+        }
+
+        .logout {
+            background: #2563eb;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .logout:hover {
+            background: #1d4ed8;
         }
 
         /* Main */
@@ -244,6 +264,7 @@
 
         /* Mobile */
         @media(max-width: 650px) {
+
             nav {
                 padding: 0 5%;
             }
@@ -295,11 +316,23 @@
 
     <!-- Navbar -->
     <nav>
+
         <div class="logo">
             Short<span>Link</span>
         </div>
 
-        <p>Simple & Fast URL Shortener</p>
+        <div class="nav-right">
+
+            <p>
+                Simple & Fast URL Shortener
+            </p>
+
+            <a href="/auth/logout" class="logout">
+                Logout
+            </a>
+
+        </div>
+
     </nav>
 
 
@@ -360,12 +393,12 @@
 
                             <div class="url-top">
 
-                                <a href="/api/<%= url.shortUrl %>" target="_blank">
-                                    localhost:3000/api/<%= url.shortUrl %>
+                                <a href="/<%= url.shortUrl %>" target="_blank">
+                                    localhost:3000/<%= url.shortUrl %>
                                 </a>
 
                                 <button class="copy" onclick="copyUrl(
-                                    'http://localhost:3000/api/<%= url.shortUrl %>'
+                                    'http://localhost:3000/<%= url.shortUrl %>'
                                 )">
                                     Copy
                                 </button>
